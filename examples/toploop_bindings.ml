@@ -140,7 +140,7 @@ let register_module ~module_name =
   Py_module.set_unit
     modl
     "eval"
-    (let%map_open str = positional "str" string ~docstring:"ocaml code to run"
+    (let%map_open str = positional_only "str" string ~docstring:"ocaml code to run"
      and verbose = keyword "verbose" bool ~default:false ~docstring:"verbose" in
      fun () -> toploop_eval str ~verbose)
     ~docstring:
@@ -182,7 +182,7 @@ let register_module ~module_name =
   Py_module.set_unit
     modl
     "add_topdir"
-    (let%map_open dir = positional "dir" string ~docstring:"directory to add" in
+    (let%map_open dir = positional_only "dir" string ~docstring:"directory to add" in
      fun () ->
        if !is_initialized then failwith "can only add directories before initialization.";
        Topdirs.dir_directory dir)
@@ -196,8 +196,8 @@ let register_module ~module_name =
   Py_module.set_unit
     modl
     "add_named_type"
-    (let%map_open name = positional "name" string ~docstring:"type name"
-     and ocaml_type = positional "ocaml_type" string ~docstring:"ocaml type" in
+    (let%map_open name = positional_only "name" string ~docstring:"type name"
+     and ocaml_type = positional_only "ocaml_type" string ~docstring:"ocaml type" in
      fun () -> Py_typerep.register_named_type ~name ~ocaml_type)
     ~docstring:
       {|
